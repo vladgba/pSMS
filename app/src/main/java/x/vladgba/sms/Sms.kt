@@ -1,9 +1,11 @@
 package x.vladgba.sms
 
+import android.app.role.RoleManager
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.provider.Telephony
 
 class Conv(val tid: Long, val addr: String, val snippet: String, val date: Long, val type: Int) {
@@ -32,7 +34,16 @@ object Sms {
 
     private val URI: Uri = Telephony.Sms.CONTENT_URI
 
-    fun isDefault(c: Context) = Telephony.Sms.getDefaultSmsPackage(c) == c.packageName
+    fun isDefault(c: Context): Boolean {
+        if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                val rm = c.getSystemService(RoleManager::class.java)
+                if (rm != null) return rm.isRoleHeld(RoleManager.ROLE_SMS)
+            } catch (_: Exception) {
+            }
+        }
+        return Telephony.Sms.getDefaultSmsPackage(c) == c.packageName
+    }
 
     fun conversations(c: Context, labels: List<Labels.Compiled> = ArrayList(0)): List<Conv> {
         val scan = Labels.Scan(labels)
