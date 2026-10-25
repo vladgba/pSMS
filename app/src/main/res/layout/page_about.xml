@@ -48,6 +48,10 @@
         <LinearLayout style="@style/Card">
 
             <TextView
+                android:id="@+id/rowTheme"
+                style="@style/CardRow" />
+
+            <TextView
                 android:id="@+id/rowDefault"
                 style="@style/CardRow"
                 android:text="@string/set_default_row" />

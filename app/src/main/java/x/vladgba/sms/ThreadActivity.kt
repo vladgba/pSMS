@@ -48,6 +48,13 @@ class ThreadActivity : Activity() {
         }
     }
 
+    private var themeMode = Theme.SYSTEM
+
+    override fun attachBaseContext(base: Context) {
+        themeMode = Theme.mode(base)
+        super.attachBaseContext(Theme.wrap(base))
+    }
+
     override fun onCreate(state: Bundle?) {
         super.onCreate(state)
         setContentView(R.layout.activity_thread)
@@ -143,6 +150,7 @@ class ThreadActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        if (themeMode != Theme.mode(this)) recreate()
         contentResolver.registerContentObserver(Telephony.Sms.CONTENT_URI, true, observer)
         reload()
     }

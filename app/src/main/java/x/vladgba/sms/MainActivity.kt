@@ -3,6 +3,7 @@ package x.vladgba.sms
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.ContentObserver
@@ -38,6 +39,13 @@ class MainActivity : Activity() {
         }
     }
 
+    private var themeMode = Theme.SYSTEM
+
+    override fun attachBaseContext(base: Context) {
+        themeMode = Theme.mode(base)
+        super.attachBaseContext(Theme.wrap(base))
+    }
+
     override fun onCreate(state: Bundle?) {
         super.onCreate(state)
         setContentView(R.layout.activity_main)
@@ -66,6 +74,7 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        if (themeMode != Theme.mode(this)) recreate()
         val def = Sms.isDefault(this)
         banner.visibility = if (def) View.GONE else View.VISIBLE
         if (def) askPermissions()

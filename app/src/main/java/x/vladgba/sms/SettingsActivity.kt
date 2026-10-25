@@ -21,6 +21,13 @@ class SettingsActivity : Activity() {
     private val pages = arrayOfNulls<Page>(TABS.size)
     private var current = 0
 
+    private var themeMode = Theme.SYSTEM
+
+    override fun attachBaseContext(base: Context) {
+        themeMode = Theme.mode(base)
+        super.attachBaseContext(Theme.wrap(base))
+    }
+
     override fun onCreate(state: Bundle?) {
         super.onCreate(state)
         pendingBackup = lastNonConfigurationInstance as? PendingBackup
@@ -52,6 +59,7 @@ class SettingsActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        if (themeMode != Theme.mode(this)) recreate()
         pages[current]?.onShow()
     }
 

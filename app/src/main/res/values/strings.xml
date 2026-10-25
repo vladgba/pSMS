@@ -196,6 +196,10 @@
     <string name="import_row">Import settings\n<small>Replace or add to current settings</small></string>
     <string name="about_desc">Ultralight SMS app. No ads, no trackers, no internet access.</string>
     <string name="version_n">Version %s</string>
+    <string name="theme">Theme</string>
+    <string name="theme_system">Follow system</string>
+    <string name="theme_day">Day</string>
+    <string name="theme_night">Night</string>
     <string name="set_default_row">Set as default SMS app</string>
     <string name="source_row">Source code\n<small>github.com/vladgba/picoSMS</small></string>
     <string name="privacy_row">Privacy policy</string>
