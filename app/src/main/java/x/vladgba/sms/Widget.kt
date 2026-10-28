@@ -7,9 +7,11 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
+import android.util.TypedValue
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.StyleSpan
+import android.text.style.TypefaceSpan
 import android.view.View
 import android.widget.RemoteViews
 
@@ -50,14 +52,20 @@ class Widget : AppWidgetProvider() {
                 }
                 val cv = convs[k]
                 val label = Contacts.label(c, cv.addr)
-                val name: CharSequence = if (cv.unread == 0) label else SpannableString(label).apply {
+                val unread = cv.unread > 0
+                fun bold(s: String): CharSequence = if (!unread) s else SpannableString(s).apply {
+                    setSpan(TypefaceSpan("sans-serif-black"), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                     setSpan(StyleSpan(Typeface.BOLD), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
                 v.setViewVisibility(ROWS[k], View.VISIBLE)
-                v.setTextViewText(NAMES[k], name)
-                v.setTextViewText(TIMES[k], Ui.time(c, cv.date))
-                v.setTextViewText(TEXTS[k], cv.snippet.replace('\n', ' '))
-                v.setTextColor(TIMES[k], c.getColor(if (cv.unread > 0) R.color.accent else R.color.text2))
+                v.setTextViewText(NAMES[k], bold(label))
+                v.setTextViewText(TIMES[k], bold(Ui.time(c, cv.date)))
+                v.setTextViewText(TEXTS[k], bold(cv.snippet.replace('\n', ' ')))
+                v.setTextColor(TIMES[k], c.getColor(if (unread) R.color.accent else R.color.text2))
+                v.setTextColor(TEXTS[k], c.getColor(if (unread) R.color.text else R.color.text2))
+                v.setTextViewTextSize(NAMES[k], TypedValue.COMPLEX_UNIT_SP, if (unread) 16f else 14f)
+                v.setTextViewTextSize(TIMES[k], TypedValue.COMPLEX_UNIT_SP, if (unread) 12f else 11f)
+                v.setTextViewTextSize(TEXTS[k], TypedValue.COMPLEX_UNIT_SP, if (unread) 15f else 13f)
                 v.setOnClickPendingIntent(ROWS[k], Notifier.openThread(c, -10 - k, cv.tid, cv.addr))
 
                 val code = if (otpOn && cv.type == Sms.INBOX) Picks.otp(cv.snippet) else null
