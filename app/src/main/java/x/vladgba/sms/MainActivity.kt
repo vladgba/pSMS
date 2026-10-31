@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.ContentObserver
 import android.graphics.Typeface
+import android.util.TypedValue
 import android.os.Build
 import android.os.Bundle
 import android.provider.Telephony
@@ -345,6 +346,16 @@ class MainActivity : Activity() {
         reload()
     }
 
+    // Heaviest weight where supported, plus fake bold so fonts without a real bold still thicken.
+    private fun heavy(tv: TextView, on: Boolean) {
+        tv.typeface = when {
+            !on -> Typeface.DEFAULT
+            Build.VERSION.SDK_INT >= 28 -> Typeface.create(Typeface.DEFAULT, 900, false)
+            else -> Typeface.DEFAULT_BOLD
+        }
+        tv.paint.isFakeBoldText = on
+    }
+
     private inner class ConvAdapter : BaseAdapter() {
         var items: List<Conv> = ArrayList()
         override fun getCount() = items.size
@@ -358,15 +369,20 @@ class MainActivity : Activity() {
             Ui.avatar(v.findViewById(R.id.avatar), cv.name, cv.addr)
             v.findViewById<TextView>(R.id.name).apply {
                 text = cv.name
-                setTypeface(null, if (unread) Typeface.BOLD else Typeface.NORMAL)
+                heavy(this, unread)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, if (unread) 18f else 16f)
             }
             v.findViewById<TextView>(R.id.time).apply {
                 text = Ui.time(context, cv.date)
                 setTextColor(getColor(if (unread) R.color.accent else R.color.text2))
+                heavy(this, unread)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, if (unread) 13f else 12f)
             }
             v.findViewById<TextView>(R.id.snippet).apply {
                 text = if (cv.type != Sms.INBOX) getString(R.string.you_prefix, cv.snippet) else cv.snippet
                 setTextColor(getColor(if (unread) R.color.text else R.color.text2))
+                heavy(this, unread)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, if (unread) 16f else 14f)
             }
             v.findViewById<TextView>(R.id.otp).apply {
                 val pk = cv.pick

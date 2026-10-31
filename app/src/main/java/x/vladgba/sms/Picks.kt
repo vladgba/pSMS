@@ -94,7 +94,7 @@ object Picks {
         val seen = HashSet<String>()
         if (otp) otp(body)?.let { out += Pick("OTP", it, true); seen += it }
         for (p in pickers) {
-            val m = p.rx.matcher(body)
+            val m = p.rx.matcher(Rules.Limited(body))
             while (m.find()) {
                 if (m.end() == m.start()) continue
                 val v = valueOf(m).trim()
@@ -107,7 +107,7 @@ object Picks {
     }
 
     fun forMessage(c: Context, body: String): Pick? =
-        extract(body, otpEnabled(c), compiled(c)).firstOrNull()
+        runCatching { extract(body, otpEnabled(c), compiled(c)).firstOrNull() }.getOrNull()
 
     fun copy(c: Context, value: String, sensitive: Boolean) {
         val cm = c.getSystemService(ClipboardManager::class.java) ?: return

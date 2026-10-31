@@ -39,7 +39,7 @@ class AboutPage(a: SettingsActivity) : Page(a, R.layout.page_about) {
         rowDefault.visibility = if (Sms.isDefault(this)) View.GONE else View.VISIBLE
     }
 
-    /** Day / Night / Follow system; the screen is recreated to apply the choice. */
+    /** Day / Night / AMOLED / Follow system; the screen is recreated to apply the choice. */
     private fun pickTheme() {
         val names = Theme.NAMES.map { getString(it) }.toTypedArray()
         AlertDialog.Builder(this).setTitle(R.string.theme)

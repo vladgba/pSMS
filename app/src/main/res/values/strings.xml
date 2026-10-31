@@ -199,6 +199,7 @@
     <string name="theme_system">Follow system</string>
     <string name="theme_day">Day</string>
     <string name="theme_night">Night</string>
+    <string name="theme_amoled">AMOLED black</string>
     <string name="set_default_row">Set as default SMS app</string>
     <string name="source_row">About pSMS\n<small>Source code, report a problem, privacy policy, license</small></string>
     <string name="privacy_row">Privacy policy</string>

@@ -112,6 +112,18 @@ object Rules {
     /** Case-insensitive, Unicode-aware flags. */
     const val CI = Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE
 
+    /** Aborts a runaway (catastrophic-backtracking) user regex instead of hanging the receiver. */
+    class Limited(private val s: CharSequence, private val ms: Long = 250) : CharSequence {
+        private val end = System.nanoTime() + ms * 1_000_000
+        override val length get() = s.length
+        override fun get(index: Int): Char {
+            if (System.nanoTime() > end) throw IllegalStateException("Regex timed out")
+            return s[index]
+        }
+        override fun subSequence(startIndex: Int, endIndex: Int): CharSequence = Limited(s.subSequence(startIndex, endIndex), ms)
+        override fun toString() = s.toString()
+    }
+
     /**
      * Splits a condition's text into entries: one per line; sender lists may also use commas,
      * except for regular expressions (a comma can be part of {2,3}). Blank and duplicate entries are dropped.
@@ -255,12 +267,12 @@ object Rules {
 
         fun matches(raw: String): Boolean {
             if (invalid || p.isEmpty()) return false
-            if (mode == Mode.REGEX || (mode == Mode.AUTO && isRegex(entry))) return rx!!.matcher(raw).find()
+            if (mode == Mode.REGEX || (mode == Mode.AUTO && isRegex(entry))) return rx!!.matcher(Limited(raw)).find()
             val v = if (isSender) norm(raw) else raw
             if (rx != null) {
                 // AUTO text rules match anywhere; everything else is a whole-value match.
-                if (mode == Mode.AUTO && !isSender) return rx.matcher(v).find()
-                return rx.matcher(v).matches() || (rx2 != null && rx2.matcher(v.trimStart('+')).matches())
+                if (mode == Mode.AUTO && !isSender) return rx.matcher(Limited(v)).find()
+                return rx.matcher(Limited(v)).matches() || (rx2 != null && rx2.matcher(Limited(v.trimStart('+'))).matches())
             }
             return when (mode) {
                 Mode.CONTAINS -> v.contains(p, ignore)
