@@ -1,18 +1,18 @@
 <p align="center">
-  <img src="store/feature_graphic_1024x500.png" alt="picoSMS" width="720">
+  <img src="store/feature_graphic_1024x500.png" alt="pSMS" width="720">
 </p>
 
-# picoSMS
+# pSMS
 
 **Tiny. Private. Just SMS.**
 
-picoSMS is an ultralight SMS app for Android. The whole release APK is about **120 KB**. It is built only on the Android framework and the Kotlin standard library: no AndroidX, no Google Play Services, no analytics, no ads. The app doesn't request the `INTERNET` permission at all.
+pSMS is an ultralight SMS app for Android. The whole release APK is about **120 KB**. It is built only on the Android framework and the Kotlin standard library: no AndroidX, no Google Play Services, no analytics, no ads. The app doesn't request the `INTERNET` permission at all.
 
 ## Download a test build
 
 Open [Android CI builds](https://github.com/vladgba/picoSMS/actions/workflows/android.yml?query=branch%3Amain), select the latest successful run on `main`, and download **pico-sms-debug-apk** from its **Artifacts** section. You must be signed in to GitHub to download the artifact.
 
-On your Android phone, extract the downloaded ZIP and open `app-debug.apk`. If prompted, allow installation from the browser or file manager you used. These are debug builds; their signing key may differ from an already installed copy of picoSMS, which prevents installing them as an update.
+On your Android phone, extract the downloaded ZIP and open `app-debug.apk`. If prompted, allow installation from the browser or file manager you used. These are debug builds; their signing key may differ from an already installed copy of pSMS, which prevents installing them as an update.
 
 The workflow link above stays the same across builds. Individual run and artifact links identify a specific build, and artifacts expire according to GitHub's retention settings (90 days by default). See [GitHub's artifact download instructions](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/download-workflow-artifacts).
 
@@ -20,10 +20,10 @@ The workflow link above stays the same across builds. Individual run and artifac
 
 - **Default SMS app.** Receives, sends and stores SMS in the system message store, so other apps and backups keep working.
 - **Conversations.** Thread list with unread badges and contact names, plus a chat view with message bubbles, send status (sending / failed) and a live character/part counter.
-- **Compose anywhere.** Handles `sms:` / `smsto:` links, "Share → picoSMS" for text, and the contact picker. You can send to several recipients at once (separate them with `,` or `;`).
+- **Compose anywhere.** Handles `sms:` / `smsto:` links, "Share → pSMS" for text, and the contact picker. You can send to several recipients at once (separate them with `,` or `;`).
 - **Notifications with quick actions.** Reply inline or mark as read straight from the notification.
 - **Quick replies from calls.** You can use "Respond via message" on the incoming-call screen.
-- **Pick OTP Code.** picoSMS spots one-time codes ("Your code is 482193", "Код за вход: 5521", "G-731045") and puts a **Copy 482193** button on the notification a tap-to-copy chip with the code under the message, and a copy chip on the right side of the conversation row on the main screen (this chip also shows values from your own pickers). Times, dates, amounts and phone numbers are ignored. The code is copied as sensitive, so Android 13+ hides it in the clipboard preview.
+- **Pick OTP Code.** pSMS spots one-time codes ("Your code is 482193", "Код за вход: 5521", "G-731045") and puts a **Copy 482193** button on the notification a tap-to-copy chip with the code under the message, and a copy chip on the right side of the conversation row on the main screen (this chip also shows values from your own pickers). Times, dates, amounts and phone numbers are ignored. The code is copied as sensitive, so Android 13+ hides it in the clipboard preview.
 - **Quick pick with regex.** You can add your own regular expressions ("pickers") to pull values out of messages the app doesn't parse by itself, such as tracking numbers, amounts, links or IBANs. Picked values show as copy chips in the chat, and the first one also appears on the right of the conversation row on the main screen. Each picker has an on/off checkbox and can be edited. While you type, a live preview shows exactly what the regex picks from your recent messages. Presets are included, and long-pressing a message offers **Create picker from this message**.
 - **White/black list rules.** Each rule has:
   1. **Sender mode:** Contains, Equals, Starts with, Ends with, Regexp or Wildcard.
@@ -43,9 +43,9 @@ The workflow link above stays the same across builds. Individual run and artifac
 - **Labels (folders).** Group conversations by **sender** (numbers, sender names, `BANK*`, `/regex/`), by **words in any message** of the conversation, or by both. With both filled in, a switch decides whether a conversation must match both or either one. A chip bar on the main screen (**Inbox**, then each label with its unread count) filters the list. Turn on **Hide from Inbox** for a label, such as banks, shops or delivery services, and its conversations leave the main list and appear only under that label's chip. Notifications still arrive as usual. Long-press a chip to edit or delete the label, or long-press a conversation and choose **Add sender to label**. A live preview shows which conversations a label will contain while you edit it. Labels only group conversations; they never move or delete messages.
 - **Back up and restore messages.** Use **Settings → Backup → Back up messages** to save all SMS to a file you choose, in one of two formats:
   - **XML**, compatible with *SMS Backup & Restore*, so you can move between the two apps in either direction.
-  - **JSON**, picoSMS's own clean format.
+  - **JSON**, pSMS's own clean format.
 
-  An optional **password** encrypts the file with AES-256-GCM, using a key derived with PBKDF2 (310,000 rounds of SHA-256 on Android 8+, 720,000 rounds of SHA-1 on Android 7), and compresses it. A wrong password or a modified file is detected and rejected. **Restore** detects the format and encryption by itself, skips messages already on the phone (so restoring twice adds nothing), and skips MMS entries. Large backups are read and written as a stream, so they never have to fit in memory. Restoring requires picoSMS to be the default SMS app. Saved "outbox"/"queued" messages come back as "not sent", so nothing is re-sent by accident.
+  An optional **password** encrypts the file with AES-256-GCM, using a key derived with PBKDF2 (310,000 rounds of SHA-256 on Android 8+, 720,000 rounds of SHA-1 on Android 7), and compresses it. A wrong password or a modified file is detected and rejected. **Restore** detects the format and encryption by itself, skips messages already on the phone (so restoring twice adds nothing), and skips MMS entries. Large backups are read and written as a stream, so they never have to fit in memory. Restoring requires pSMS to be the default SMS app. Saved "outbox"/"queued" messages come back as "not sent", so nothing is re-sent by accident.
 - **Export / import settings.** Settings → Backup → Export settings saves your rules, labels, Quick pick regexes and switches as a readable JSON file, wherever you choose (local storage, a USB drive, any cloud app's document provider). Import shows what's in the file and lets you **Replace** your current settings or **Add** to them (duplicates are skipped). Messages and the blocked quarantine are never included.
 - **Home screen widget.** A header-less list of the four latest conversations. When the latest message in a conversation is a one-time code, its row gets a compact **copy** chip on the right, so you can copy the code without opening the app. Tap a row to open the chat, or empty space to open the app. It is resizable and follows dark mode.
 - **Tidy layout.** The main screen shows only conversations, the label chips and a ⚙ **Settings** button. Settings has tabs:
@@ -58,13 +58,13 @@ The workflow link above stays the same across builds. Individual run and artifac
 
 ### Not supported
 
-- **MMS.** picoSMS has to declare an MMS receiver to qualify as the default SMS app, but it doesn't download or display MMS. When one arrives, you get a notification saying it can't be shown. Backups contain SMS only, and MMS entries in imported files are skipped.
+- **MMS.** pSMS has to declare an MMS receiver to qualify as the default SMS app, but it doesn't download or display MMS. When one arrives, you get a notification saying it can't be shown. Backups contain SMS only, and MMS entries in imported files are skipped.
 - **Picking a SIM on dual-SIM phones.** Messages go out through the system's default SMS SIM.
 - **RCS / chat features.**
 
 ## How filtering decides
 
-For each incoming SMS, picoSMS checks these in order (paused rules are skipped):
+For each incoming SMS, pSMS checks these in order (paused rules are skipped):
 
 1. Does any **whitelist** rule match? If so, the message is delivered.
 2. Does any **blacklist** rule match? If so, it goes to quarantine.
@@ -98,7 +98,7 @@ Versioning and signing come from `gradle/android-common.gradle`, the same shared
 - **Version:** `version.properties` holds `major`/`minor`/`patch`. `versionName` is `M.m.p` and `versionCode` is `M*10000 + m*100 + p`. Bump it with `gradlew bumpPatch`, `bumpMinor` or `bumpMajor`, and check it with `gradlew printVersion`.
 - **Release key:** taken from `keystore.properties` in the project root if present (git-ignored), otherwise from `RELEASE_STORE_FILE`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS` and `RELEASE_KEY_PASSWORD`. Those can be environment variables, `-P` options or entries in `~/.gradle/gradle.properties`.
 - **No key found:** the release build is signed with the debug key and a warning is printed. Use `-Pandroid.common.unsigned=true` for an unsigned build.
-- **APK name:** the output is named `picoSMS-<version>-release.apk`.
+- **APK name:** the output is named `pSMS-<version>-release.apk`.
 
 ## Project layout
 
@@ -133,12 +133,12 @@ store/                Play Store icon (512×512) and feature graphic (1024×500)
 
 ## Google Play notes
 
-- The app uses the SMS permission group. Google Play only allows that for apps whose core function is being the **default SMS handler**, which is picoSMS's case. Declare "Default SMS handler" in the Permissions Declaration Form.
+- The app uses the SMS permission group. Google Play only allows that for apps whose core function is being the **default SMS handler**, which is pSMS's case. Declare "Default SMS handler" in the Permissions Declaration Form.
 - Store assets are in [`store/`](store/), and the privacy policy is [PRIVACY.md](PRIVACY.md).
 
 ## Privacy
 
-picoSMS has no network access, and it collects and shares nothing. See [PRIVACY.md](PRIVACY.md).
+pSMS has no network access, and it collects and shares nothing. See [PRIVACY.md](PRIVACY.md).
 
 ## License
 

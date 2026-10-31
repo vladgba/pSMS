@@ -30,7 +30,7 @@ class BackupPage(a: SettingsActivity) : Page(a, R.layout.page_backup) {
         val i = if (export) {
             val day = android.text.format.DateFormat.format("yyyy-MM-dd", System.currentTimeMillis())
             Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE)
-                .setType("application/json").putExtra(Intent.EXTRA_TITLE, "picoSMS-settings-$day.json")
+                .setType("application/json").putExtra(Intent.EXTRA_TITLE, "pSMS-settings-$day.json")
         } else {
             Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*")
                 .putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/json", "text/plain", "application/octet-stream"))
@@ -140,7 +140,7 @@ class BackupPage(a: SettingsActivity) : Page(a, R.layout.page_backup) {
                 val enc = request.password != null
                 val i = Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE)
                     .setType(if (enc) "application/octet-stream" else if (request.json) "application/json" else "text/xml")
-                    .putExtra(Intent.EXTRA_TITLE, "picoSMS-sms-$day.$ext" + if (enc) ".enc" else "")
+                    .putExtra(Intent.EXTRA_TITLE, "pSMS-sms-$day.$ext" + if (enc) ".enc" else "")
                 try {
                     a.startActivityForResult(i, BACKUP)
                 } catch (_: Exception) {

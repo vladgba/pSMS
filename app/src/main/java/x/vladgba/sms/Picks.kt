@@ -111,7 +111,7 @@ object Picks {
 
     fun copy(c: Context, value: String, sensitive: Boolean) {
         val cm = c.getSystemService(ClipboardManager::class.java) ?: return
-        val clip = ClipData.newPlainText("picoSMS", value)
+        val clip = ClipData.newPlainText("pSMS", value)
         if (sensitive) {
             // Hide the code in the Android 13+ clipboard preview.
             clip.description.extras = PersistableBundle().apply {

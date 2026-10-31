@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- picoSMS never backs up or transfers its data (filter rules, blocked messages). -->
+<!-- pSMS never backs up or transfers its data (filter rules, blocked messages). -->
 <data-extraction-rules>
     <cloud-backup>
         <exclude domain="root" />

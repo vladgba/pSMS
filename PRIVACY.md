@@ -1,8 +1,8 @@
-# picoSMS Privacy Policy
+# pSMS Privacy Policy
 
 _Last updated: October 10, 2026_
 
-picoSMS ("the app") is an open-source SMS app developed by vladgba. This policy explains what the app does with your data. In short: **everything stays on your device.**
+pSMS ("the app") is an open-source SMS app developed by vladgba. This policy explains what the app does with your data. In short: **everything stays on your device.**
 
 ## No data collection
 

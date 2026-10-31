@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="r_storage_failed">Could not save to inbox</string>
-    <string name="app_name">picoSMS</string>
-    <string name="widget_name">picoSMS messages</string>
+    <string name="widget_name">pSMS messages</string>
     <string name="widget_desc">Latest conversations with one-tap OTP copy</string>
-    <string name="not_default">picoSMS is not your default SMS app, so it can\'t receive or manage messages.</string>
+    <string name="not_default">pSMS is not your default SMS app, so it can\'t receive or manage messages.</string>
     <string name="set_default">Set as default</string>
     <string name="no_messages">No messages yet</string>
     <string name="new_message">New message</string>
@@ -38,7 +37,7 @@
     <string name="ch_messages">Messages</string>
     <string name="ch_messages_desc">Incoming SMS</string>
     <string name="mms_unsupported">MMS received</string>
-    <string name="mms_unsupported_text">picoSMS does not support MMS. Ask the sender to use SMS.</string>
+    <string name="mms_unsupported_text">pSMS does not support MMS. Ask the sender to use SMS.</string>
     <string name="wl_mode">Whitelist mode</string>
     <string name="wl_mode_desc">Block every sender that is not whitelisted</string>
     <string name="allow_contacts">Always allow contacts</string>
@@ -81,7 +80,7 @@
     <string name="applied_black">Rule saved. %d messages moved to Blocked</string>
     <string name="applied_white">Rule saved. %d messages restored</string>
     <string name="rule_saved">Rule saved</string>
-    <string name="apply_needs_default">Rule saved. Set picoSMS as the default SMS app to move existing messages.</string>
+    <string name="apply_needs_default">Rule saved. Set pSMS as the default SMS app to move existing messages.</string>
     <string name="apply_q_black">Move %d matching messages to Blocked messages?</string>
     <string name="apply_q_white">Restore %d matching blocked messages to your inbox?</string>
     <string name="apply_nothing">No existing messages match this rule</string>
@@ -153,7 +152,7 @@
     <string name="import_cfg">Import settings</string>
     <string name="exported">Settings exported</string>
     <string name="export_failed">Could not write the file</string>
-    <string name="import_bad">This is not a picoSMS settings file</string>
+    <string name="import_bad">This is not a pSMS settings file</string>
     <string name="import_q">The file has %1$d rules, %2$d labels and %3$d pickers.\n\nReplace your current rules, labels and pickers with them, or add them to what you have? Duplicates are skipped when adding. Messages are never touched.</string>
     <string name="import_replace">Replace</string>
     <string name="import_merge">Add</string>
@@ -174,7 +173,7 @@
     <string name="bk_working">Backing up… %1$d / %2$d</string>
     <string name="bk_done">Saved %d messages</string>
     <string name="bk_failed">Backup failed: %s</string>
-    <string name="rs_need_default">Set picoSMS as the default SMS app to restore messages</string>
+    <string name="rs_need_default">Set pSMS as the default SMS app to restore messages</string>
     <string name="rs_password">This backup is encrypted</string>
     <string name="rs_wrong">Wrong password</string>
     <string name="rs_working">Restoring… %d</string>
@@ -191,7 +190,7 @@
     <string name="sec_messages">MESSAGES</string>
     <string name="sec_settings">SETTINGS</string>
     <string name="bk_backup_row">Back up messages\n<small>XML or JSON, optional password</small></string>
-    <string name="bk_restore_row">Restore messages\n<small>From a picoSMS or SMS Backup &amp; Restore file</small></string>
+    <string name="bk_restore_row">Restore messages\n<small>From a pSMS or SMS Backup &amp; Restore file</small></string>
     <string name="export_row">Export settings\n<small>Rules, labels, Quick pick, switches</small></string>
     <string name="import_row">Import settings\n<small>Replace or add to current settings</small></string>
     <string name="about_desc">Ultralight SMS app. No ads, no trackers, no internet access.</string>
