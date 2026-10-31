@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "picoSMS"
+rootProject.name = "pSMS"
 include(":app")
