@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg">#FFF6F7F9</color>
-    <color name="surface">#FFFFFFFF</color>
-    <color name="text">#FF111418</color>
-    <color name="text2">#FF5B6470</color>
-    <color name="divider">#FFE3E6EA</color>
-    <color name="accent">#FF0F9D8A</color>
-    <color name="on_accent">#FFFFFFFF</color>
-    <color name="bubble_in">#FFE9EDF1</color>
-    <color name="danger">#FFD23C3C</color>
-    <color name="allow">#FF2E8B57</color>
+    <!-- pSMS roles, aliased to the shared pUI tokens (light/dark handled by the tokens). -->
+    <color name="bg">@color/p_bg</color>
+    <color name="surface">@color/p_surface</color>
+    <color name="text">@color/p_text</color>
+    <color name="text2">@color/p_text2</color>
+    <color name="divider">@color/p_line</color>
+    <color name="accent">@color/p_accent</color>
+    <color name="on_accent">@color/p_on_accent</color>
+    <color name="bubble_in">@color/p_surface2</color>
+    <color name="danger">@color/p_danger</color>
+    <color name="allow">@color/p_success</color>
 </resources>
