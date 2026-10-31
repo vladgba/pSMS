@@ -34,7 +34,7 @@ object Backup {
         ruleList: List<Rule>, labelList: List<Label>, pickerList: List<Picker>
     ): String {
         val root = JSONObject()
-        root.put("app", "picoSMS")
+        root.put("app", "pSMS")
         root.put("format", FORMAT)
 
         val set = JSONObject()
@@ -84,7 +84,7 @@ object Backup {
     /** @throws Exception when [json] is not a picoSMS settings file. */
     fun parse(json: String): Parsed {
         val root = JSONObject(json)
-        require(root.optString("app") == "picoSMS") { "not a picoSMS file" }
+        require(root.optString("app") in setOf("pSMS", "picoSMS")) { "not a pSMS file" }
         val set = root.optJSONObject("settings")
 
         val rules = ArrayList<Rule>()

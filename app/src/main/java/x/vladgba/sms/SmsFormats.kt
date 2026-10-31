@@ -67,8 +67,8 @@ class XmlOut(private val w: Writer) : MsgWriter {
 
     override fun begin(count: Int) {
         w.write("<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>\n")
-        w.write("<!--Exported by picoSMS. Compatible with SMS Backup & Restore.-->\n")
-        w.write("<smses count=\"$count\" backup_set=\"picoSMS\" backup_date=\"${System.currentTimeMillis()}\" type=\"full\">\n")
+        w.write("<!--Exported by pSMS. Compatible with SMS Backup & Restore.-->\n")
+        w.write("<smses count=\"$count\" backup_set=\"pSMS\" backup_date=\"${System.currentTimeMillis()}\" type=\"full\">\n")
     }
 
     override fun write(m: BakMsg, contact: String?) {
@@ -308,14 +308,14 @@ class XmlIn(private val r: Reader) : MsgReader {
     }
 }
 
-// ---------------------------------------------------------------- JSON (picoSMS)
+// ---------------------------------------------------------------- JSON (pSMS)
 
-/** {"app":"picoSMS","type":"sms","format":1,"count":N,"messages":[{...},...]} */
+/** {"app":"pSMS","type":"sms","format":1,"count":N,"messages":[{...},...]} */
 class JsonOut(private val w: Writer) : MsgWriter {
     private var first = true
 
     override fun begin(count: Int) {
-        w.write("{\n  \"app\": \"picoSMS\",\n  \"type\": \"sms\",\n  \"format\": 1,\n")
+        w.write("{\n  \"app\": \"pSMS\",\n  \"type\": \"sms\",\n  \"format\": 1,\n")
         w.write("  \"exported\": ${System.currentTimeMillis()},\n  \"count\": $count,\n  \"messages\": [")
     }
 
