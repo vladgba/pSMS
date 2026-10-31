@@ -10,9 +10,9 @@ pSMS is an ultralight SMS app for Android. The whole release APK is about **120 
 
 ## Download a test build
 
-Open [Android CI builds](https://github.com/vladgba/picoSMS/actions/workflows/android.yml?query=branch%3Amain), select the latest successful run on `main`, and download **pico-sms-debug-apk** from its **Artifacts** section. You must be signed in to GitHub to download the artifact.
+Open [Android CI builds](https://github.com/vladgba/pSMS/actions/workflows/build.yml?query=branch%3Amain), select the latest successful run on `main`, and download **pSMS-<version>-release-apk** from its **Artifacts** section. You must be signed in to GitHub to download the artifact.
 
-On your Android phone, extract the downloaded ZIP and open `app-debug.apk`. If prompted, allow installation from the browser or file manager you used. These are debug builds; their signing key may differ from an already installed copy of pSMS, which prevents installing them as an update.
+On your Android phone, extract the downloaded ZIP and open `pSMS-<version>-release.apk`. If prompted, allow installation from the browser or file manager you used. CI signs with the release key when the repository's signing secrets are set; otherwise with a throwaway key, which prevents installing it as an update of an already installed copy.
 
 The workflow link above stays the same across builds. Individual run and artifact links identify a specific build, and artifacts expire according to GitHub's retention settings (90 days by default). See [GitHub's artifact download instructions](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/download-workflow-artifacts).
 

@@ -61,7 +61,7 @@ class AboutPage(a: SettingsActivity) : Page(a, R.layout.page_about) {
     }
 
     companion object {
-        private const val SOURCE = "https://github.com/vladgba/picoSMS"
-        private const val PRIVACY = "https://github.com/vladgba/picoSMS/blob/main/PRIVACY.md"
+        private const val SOURCE = "https://github.com/vladgba/pSMS"
+        private const val PRIVACY = "https://github.com/vladgba/pSMS/blob/main/PRIVACY.md"
     }
 }

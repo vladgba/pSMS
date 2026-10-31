@@ -69,4 +69,4 @@ If this policy changes, the updated version will be published in the app's repos
 
 ## Contact
 
-Questions? Open an issue at https://github.com/vladgba/picoSMS.
+Questions? Open an issue at https://github.com/vladgba/pSMS.
