@@ -9,6 +9,8 @@ import android.text.style.RelativeSizeSpan
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import x.vladgba.sms.pui.PAboutInfo
+import x.vladgba.sms.pui.showPAbout
 
 /** About tab: version, day/night theme, default-app status, source code and privacy policy. */
 class AboutPage(a: SettingsActivity) : Page(a, R.layout.page_about) {
@@ -29,7 +31,7 @@ class AboutPage(a: SettingsActivity) : Page(a, R.layout.page_about) {
         }
         rowTheme.setOnClickListener { pickTheme() }
         rowDefault.setOnClickListener { Ui.requestDefault(a) }
-        findViewById<View>(R.id.rowSource).setOnClickListener { open(SOURCE) }
+        findViewById<View>(R.id.rowSource).setOnClickListener { a.showPAbout(PAboutInfo(repo = "pSMS", privacy = true)) }
         findViewById<View>(R.id.rowPrivacy).setOnClickListener { open(PRIVACY) }
     }
 
@@ -61,7 +63,6 @@ class AboutPage(a: SettingsActivity) : Page(a, R.layout.page_about) {
     }
 
     companion object {
-        private const val SOURCE = "https://github.com/vladgba/pSMS"
         private const val PRIVACY = "https://github.com/vladgba/pSMS/blob/main/PRIVACY.md"
     }
 }

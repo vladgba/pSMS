@@ -200,7 +200,7 @@
     <string name="theme_day">Day</string>
     <string name="theme_night">Night</string>
     <string name="set_default_row">Set as default SMS app</string>
-    <string name="source_row">Source code\n<small>github.com/vladgba/pSMS</small></string>
+    <string name="source_row">About pSMS\n<small>Source code, report a problem, privacy policy, license</small></string>
     <string name="privacy_row">Privacy policy</string>
     <string name="label_hide">Hide from Inbox (show only under this label)</string>
 </resources>
