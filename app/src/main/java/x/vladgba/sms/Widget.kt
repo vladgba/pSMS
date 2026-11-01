@@ -34,7 +34,7 @@ class Widget : AppWidgetProvider() {
             val m = AppWidgetManager.getInstance(c) ?: return
             val ids = m.getAppWidgetIds(ComponentName(c, Widget::class.java))
             if (ids.isEmpty()) return
-            val convs = Sms.conversations(c)
+            val convs = Sms.conversations(c, limit = ROWS.size)
             val otpOn = Picks.otpEnabled(c)
             val v = RemoteViews(c.packageName, R.layout.widget)
 

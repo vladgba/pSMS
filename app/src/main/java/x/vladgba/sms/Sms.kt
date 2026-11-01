@@ -45,7 +45,9 @@ object Sms {
         return Telephony.Sms.getDefaultSmsPackage(c) == c.packageName
     }
 
-    fun conversations(c: Context, labels: List<Labels.Compiled> = ArrayList(0)): List<Conv> {
+    fun conversations(c: Context, labels: List<Labels.Compiled> = emptyList(),
+                      limit: Int = Int.MAX_VALUE): List<Conv> {
+        if (limit <= 0) return emptyList()
         val scan = Labels.Scan(labels)
         val map = LinkedHashMap<Long, Conv>()
         try {
@@ -57,13 +59,14 @@ object Sms {
                     val tid = cur.getLong(0)
                     var cv = map[tid]
                     if (cv == null) {
+                        if (map.size >= limit) continue
                         val a = cur.getString(1)
                         if (a.isNullOrEmpty()) continue
                         cv = Conv(tid, a, cur.getString(2) ?: "", cur.getLong(3), cur.getInt(4))
                         map[tid] = cv
                     }
                     if (cur.getInt(5) == 0 && cur.getInt(4) == INBOX) cv.unread++
-                    scan.row(tid, cur.getString(2) ?: "")
+                    if (labels.isNotEmpty()) scan.row(tid, cur.getString(2) ?: "")
                 }
             }
         } catch (_: Exception) {
