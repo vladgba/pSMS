@@ -10,9 +10,11 @@ import android.database.sqlite.SQLiteOpenHelper
 class Label(val id: Long, val name: String, val senders: String, val words: String, val both: Boolean, val hide: Boolean = false)
 class Picker(val id: Long, val name: String, val regex: String, val enabled: Boolean)
 class Blocked(val id: Long, val addr: String, val body: String, val date: Long, val sub: Int, val reason: String)
+/** A word with a weight: positive = important, negative = bad. Drives the message rating. */
+class Weight(val id: Long, val word: String, val weight: Int)
 
 /** App-private storage: filter rules and the blocked-message quarantine. */
-class Db private constructor(c: Context) : SQLiteOpenHelper(c, "pico.db", null, 7) {
+class Db private constructor(c: Context) : SQLiteOpenHelper(c, "pico.db", null, 8) {
 
     override fun onCreate(db: SQLiteDatabase) {
         createRules(db, "rules")
@@ -20,6 +22,7 @@ class Db private constructor(c: Context) : SQLiteOpenHelper(c, "pico.db", null, 
         createPickers(db)
         createLabels(db)
         createSentParts(db)
+        createWeights(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, from: Int, to: Int) {
@@ -31,7 +34,29 @@ class Db private constructor(c: Context) : SQLiteOpenHelper(c, "pico.db", null, 
         // v3–v5 labels tables lack "hide" (a table created above for v1–v2 already has it).
         if (from in 3..5) db.execSQL("ALTER TABLE labels ADD COLUMN hide INTEGER NOT NULL DEFAULT 0")
         if (from < 7) createSentParts(db)
+        if (from < 8) createWeights(db)
     }
+
+    private fun createWeights(db: SQLiteDatabase) =
+        db.execSQL("CREATE TABLE IF NOT EXISTS weights(_id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT NOT NULL UNIQUE COLLATE NOCASE, weight INTEGER NOT NULL)")
+
+    fun weights(): List<Weight> {
+        val out = ArrayList<Weight>()
+        readableDatabase.rawQuery("SELECT _id, word, weight FROM weights ORDER BY weight DESC, word", null).use {
+            while (it.moveToNext()) out.add(Weight(it.getLong(0), it.getString(1), it.getInt(2)))
+        }
+        return out
+    }
+
+    /** Adds a word or updates its weight (positive = important, negative = bad). */
+    fun saveWeight(word: String, weight: Int) {
+        val v = ContentValues()
+        v.put("word", word.trim().lowercase())
+        v.put("weight", weight)
+        writableDatabase.insertWithOnConflict("weights", null, v, SQLiteDatabase.CONFLICT_REPLACE)
+    }
+
+    fun removeWeight(word: String) = writableDatabase.delete("weights", "word=?", arrayOf(word.trim().lowercase()))
 
     private fun createSentParts(db: SQLiteDatabase) = db.execSQL(
         "CREATE TABLE sent_parts(uri TEXT NOT NULL, part INTEGER NOT NULL, ok INTEGER NOT NULL, PRIMARY KEY(uri, part))"

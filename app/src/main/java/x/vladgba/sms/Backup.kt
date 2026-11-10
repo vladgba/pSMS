@@ -18,20 +18,22 @@ object Backup {
         val pickOtp: Boolean?,
         val rules: List<Rule>,
         val labels: List<Label>,
-        val pickers: List<Picker>
+        val pickers: List<Picker>,
+        val weights: List<Weight>
     )
 
     fun export(c: Context): String {
         val db = Db.get(c)
         return toJson(
             Rules.whitelistMode(c), Rules.allowContacts(c), Picks.otpEnabled(c),
-            db.rules(), db.labels(), db.pickers()
+            db.rules(), db.labels(), db.pickers(), db.weights()
         )
     }
 
     fun toJson(
         whitelistMode: Boolean, allowContacts: Boolean, pickOtp: Boolean,
-        ruleList: List<Rule>, labelList: List<Label>, pickerList: List<Picker>
+        ruleList: List<Rule>, labelList: List<Label>, pickerList: List<Picker>,
+        weightList: List<Weight> = emptyList()
     ): String {
         val root = JSONObject()
         root.put("app", "pSMS")
@@ -78,6 +80,15 @@ object Backup {
             pickers.put(o)
         }
         root.put("pickers", pickers)
+
+        val weights = JSONArray()
+        for (w in weightList) {
+            val o = JSONObject()
+            o.put("word", w.word)
+            o.put("weight", w.weight)
+            weights.put(o)
+        }
+        root.put("weights", weights)
         return root.toString(2)
     }
 
@@ -123,23 +134,36 @@ object Backup {
             if (set != null && set.has("whitelistMode")) set.optBoolean("whitelistMode") else null,
             if (set != null && set.has("allowContacts")) set.optBoolean("allowContacts") else null,
             if (set != null && set.has("pickOtp")) set.optBoolean("pickOtp") else null,
-            rules, labels, pickers
+            rules, labels, pickers, parseWeights(root)
         )
     }
 
+    private fun parseWeights(root: JSONObject): List<Weight> {
+        val out = ArrayList<Weight>()
+        root.optJSONArray("weights")?.let { a ->
+            for (i in 0 until a.length()) {
+                val o = a.optJSONObject(i) ?: continue
+                val word = o.optString("word").trim().lowercase()
+                if (word.isNotEmpty()) out.add(Weight(0, word, o.optInt("weight", 1)))
+            }
+        }
+        return out
+    }
+
     /**
-     * Saves [p]. With [replace] the current rules, labels and pickers are deleted first;
+     * Saves [p]. With [replace] the current rules, labels, pickers and marks are deleted first;
      * otherwise entries identical to existing ones are skipped. All-or-nothing.
-     * @return counts of rules, labels and pickers actually added.
+     * @return counts of rules, labels, pickers and marks actually added.
      */
     fun apply(c: Context, p: Parsed, replace: Boolean): IntArray {
         val db = Db.get(c)
-        val n = IntArray(3)
+        val n = IntArray(4)
         db.tx {
             if (replace) {
                 db.clear("rules")
                 db.clear("labels")
                 db.clear("pickers")
+                db.clear("weights")
             }
             val haveRules = HashSet<String>()
             for (r in db.rules()) haveRules.add(key(r))
@@ -161,6 +185,12 @@ object Backup {
             for (k in p.pickers) if (havePickers.add(k.name + "\u0000" + k.regex)) {
                 db.insertPicker(k.name, k.regex, k.enabled)
                 n[2]++
+            }
+            val haveWords = HashSet<String>()
+            for (w in db.weights()) haveWords.add(w.word)
+            for (w in p.weights) if (haveWords.add(w.word)) {
+                db.saveWeight(w.word, w.weight)
+                n[3]++
             }
         }
         p.whitelistMode?.let { Rules.setWhitelistMode(c, it) }

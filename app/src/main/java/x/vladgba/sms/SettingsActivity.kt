@@ -68,6 +68,7 @@ class SettingsActivity : Activity() {
         TAB_BLOCKED -> BlockedPage(this)
         TAB_PICK -> PickersPage(this)
         TAB_BACKUP -> BackupPage(this)
+        TAB_MARKS -> MarksPage(this)
         else -> AboutPage(this)
     }.also { pages[i] = it }
 
@@ -111,7 +112,11 @@ class SettingsActivity : Activity() {
         const val TAB_PICK = 2
         const val TAB_BACKUP = 3
         const val TAB_ABOUT = 4
-        private val TABS = intArrayOf(R.string.tab_filters, R.string.tab_blocked, R.string.quick_pick, R.string.tab_backup, R.string.about)
+        const val TAB_MARKS = 5
+        private val TABS = intArrayOf(
+            R.string.tab_filters, R.string.tab_blocked, R.string.quick_pick,
+            R.string.tab_backup, R.string.about, R.string.tab_marks
+        )
 
         fun intent(c: Context, tab: Int): Intent = Intent(c, SettingsActivity::class.java).putExtra(EXTRA_TAB, tab)
     }

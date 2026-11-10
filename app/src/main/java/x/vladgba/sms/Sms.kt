@@ -15,12 +15,16 @@ class Conv(val tid: Long, val addr: String, val snippet: String, val date: Long,
     var pick: Pick? = null
     /** Bit i set = belongs to label i. */
     var labels = 0L
+    /** Rating from weighted words, summed over all messages of the conversation. */
+    var mark = 0
 }
 
 private val NO_PICKS = ArrayList<Pick>(0)
 
 class Msg(val id: Long, val body: String, val date: Long, val type: Int, val read: Boolean) {
     var picks: List<Pick> = NO_PICKS
+    /** Rating from weighted words in this message. */
+    var mark = 0
 }
 
 /** Thin wrapper around the system SMS provider (content://sms). */
@@ -46,7 +50,7 @@ object Sms {
     }
 
     fun conversations(c: Context, labels: List<Labels.Compiled> = emptyList(),
-                      limit: Int = Int.MAX_VALUE): List<Conv> {
+                      marks: Marks.Compiled? = null, limit: Int = Int.MAX_VALUE): List<Conv> {
         if (limit <= 0) return emptyList()
         val scan = Labels.Scan(labels)
         val map = LinkedHashMap<Long, Conv>()
@@ -66,7 +70,9 @@ object Sms {
                         map[tid] = cv
                     }
                     if (cur.getInt(5) == 0 && cur.getInt(4) == INBOX) cv.unread++
-                    if (labels.isNotEmpty()) scan.row(tid, cur.getString(2) ?: "")
+                    val body = cur.getString(2) ?: ""
+                    if (labels.isNotEmpty()) scan.row(tid, body)
+                    if (marks != null && !marks.isEmpty()) cv.mark += marks.score(body)
                 }
             }
         } catch (_: Exception) {
@@ -98,8 +104,17 @@ object Sms {
         return out
     }
 
-    /** Latest address of a thread (used when a thread is opened without one). */
-    fun addressOf(c: Context, tid: Long): String? {
+    /** Calls [each] with the body of every message, newest first (used for word review). */
+    fun forEachBody(c: Context, each: (String) -> Unit) {
+        try {
+            c.contentResolver.query(URI, arrayOf("body"), null, null, "date DESC")?.use {
+                while (it.moveToNext()) each(it.getString(0) ?: "")
+            }
+        } catch (_: Exception) {
+        }
+    }
+
+    /** Latest address of a thread (used when a thread is opened without one). */    fun addressOf(c: Context, tid: Long): String? {
         try {
             c.contentResolver.query(URI, arrayOf("address"), "thread_id=?", arrayOf(tid.toString()), "date DESC")
                 ?.use { if (it.moveToFirst()) return it.getString(0) }

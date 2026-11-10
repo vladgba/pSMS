@@ -92,7 +92,7 @@ class MainActivity : Activity() {
     private fun reload() {
         Ui.load({
             val labels = Db.get(this).labels()
-            val l = Sms.conversations(this, Labels.compile(labels))
+            val l = Sms.conversations(this, Labels.compile(labels), Marks.Compiled(Db.get(this).weights()))
             val otp = Picks.otpEnabled(this)
             val pickers = Picks.compiled(this)
             for (cv in l) {
@@ -377,6 +377,14 @@ class MainActivity : Activity() {
                 setTextColor(getColor(if (unread) R.color.accent else R.color.text2))
                 heavy(this, unread)
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, if (unread) 13f else 12f)
+            }
+            v.findViewById<TextView>(R.id.mark).apply {
+                val mk = cv.mark
+                visibility = if (mk != 0) View.VISIBLE else View.GONE
+                if (mk != 0) {
+                    text = getString(if (mk > 0) R.string.mark_up else R.string.mark_down, mk)
+                    setTextColor(getColor(if (mk > 0) R.color.accent else R.color.danger))
+                }
             }
             v.findViewById<TextView>(R.id.snippet).apply {
                 text = if (cv.type != Sms.INBOX) getString(R.string.you_prefix, cv.snippet) else cv.snippet

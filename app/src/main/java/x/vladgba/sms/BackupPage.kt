@@ -95,7 +95,7 @@ class BackupPage(a: SettingsActivity) : Page(a, R.layout.page_backup) {
                 return@load
             }
             AlertDialog.Builder(this).setTitle(R.string.import_cfg)
-                .setMessage(getString(R.string.import_q, p.rules.size, p.labels.size, p.pickers.size))
+                .setMessage(getString(R.string.import_q, p.rules.size, p.labels.size, p.pickers.size, p.weights.size))
                 .setPositiveButton(R.string.import_replace) { _, _ -> doImport(p, true) }
                 .setNeutralButton(R.string.import_merge) { _, _ -> doImport(p, false) }
                 .setNegativeButton(R.string.cancel, null).show()
@@ -261,7 +261,7 @@ class BackupPage(a: SettingsActivity) : Page(a, R.layout.page_backup) {
         }) { n ->
             if (n == null) Toast.makeText(this, R.string.import_bad, Toast.LENGTH_LONG).show()
             else {
-                Toast.makeText(this, getString(R.string.imported, n[0], n[1], n[2]), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.imported, n[0], n[1], n[2], n[3]), Toast.LENGTH_LONG).show()
             }
         }
     }

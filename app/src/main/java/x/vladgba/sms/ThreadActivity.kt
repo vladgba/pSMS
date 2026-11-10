@@ -15,7 +15,12 @@ import android.provider.ContactsContract
 import android.provider.Telephony
 import android.telephony.SmsMessage
 import android.text.Editable
+import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
+import android.graphics.Typeface
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -168,7 +173,11 @@ class ThreadActivity : Activity() {
             val msgs = Sms.messages(this, t)
             val otp = Picks.otpEnabled(this)
             val rx = Picks.compiled(this)
-            for (m in msgs) m.picks = Picks.extract(m.body, otp && m.type == Sms.INBOX, rx)
+            val marks = Marks.Compiled(Db.get(this).weights())
+            for (m in msgs) {
+                m.picks = Picks.extract(m.body, otp && m.type == Sms.INBOX, rx)
+                m.mark = marks.score(m.body)
+            }
             if (msgs.any { !it.read }) {
                 Sms.markRead(this, t)
                 Widget.update(this)
@@ -248,6 +257,7 @@ class ThreadActivity : Activity() {
         opts += R.string.create_picker to {
             startActivity(SettingsActivity.intent(this, SettingsActivity.TAB_PICK).putExtra(SettingsActivity.EXTRA_SAMPLE, m.body))
         }
+        opts += R.string.mark_words to { markWordsDialog(m.body) }
         opts += R.string.forward to { startActivity(intent(this, -1, null).putExtra("sms_body", m.body)) }
         if (m.type == Sms.FAILED) opts += R.string.resend to {
             val a = addr
@@ -259,6 +269,39 @@ class ThreadActivity : Activity() {
                 if (o.first == 0) getString(R.string.copy_value, m.picks[i].value) else getString(o.first)
             }.toTypedArray()) { _, w -> opts[w].second() }
             .show()
+    }
+
+    /** Pick words from a message and mark them as important, bad, or clear their mark. */
+    private fun markWordsDialog(body: String) {
+        val words = Marks.wordsOf(body)
+        if (words.isEmpty()) {
+            Toast.makeText(this, R.string.no_words, Toast.LENGTH_SHORT).show()
+            return
+        }
+        val checked = BooleanArray(words.size)
+        AlertDialog.Builder(this)
+            .setTitle(R.string.mark_words_title)
+            .setMultiChoiceItems(words.toTypedArray(), checked) { _, which, on -> checked[which] = on }
+            .setPositiveButton(R.string.weight_important) { _, _ -> applyMarks(words, checked, Marks.IMPORTANT) }
+            .setNegativeButton(R.string.weight_bad) { _, _ -> applyMarks(words, checked, Marks.BAD) }
+            .setNeutralButton(R.string.weight_remove) { _, _ -> applyMarks(words, checked, 0) }
+            .show()
+    }
+
+    private fun applyMarks(words: List<String>, checked: BooleanArray, weight: Int) {
+        val picked = words.filterIndexed { i, _ -> checked[i] }
+        if (picked.isEmpty()) return
+        Ui.load({
+            val db = Db.get(this)
+            for (w in picked) if (weight == 0) db.removeWeight(w) else db.saveWeight(w, weight)
+        }) {
+            Toast.makeText(
+                this,
+                if (weight == 0) R.string.marked_removed else R.string.marked_saved,
+                Toast.LENGTH_SHORT
+            ).show()
+            reload()
+        }
     }
 
     private fun copy(s: String) {
@@ -330,10 +373,23 @@ class ThreadActivity : Activity() {
                 Sms.DRAFT -> getString(R.string.draft)
                 else -> null
             }
-            if (showTime || status != null) {
+            val mark = m.mark
+            if (showTime || status != null || mark != 0) {
                 meta.visibility = View.VISIBLE
-                meta.text = if (status != null) Ui.time(this@ThreadActivity, m.date) + " · " + status
-                else Ui.time(this@ThreadActivity, m.date)
+                val sb = SpannableStringBuilder()
+                if (mark != 0) {
+                    val start = sb.length
+                    sb.append(getString(if (mark > 0) R.string.mark_up else R.string.mark_down, mark))
+                    sb.setSpan(
+                        ForegroundColorSpan(getColor(if (mark > 0) R.color.accent else R.color.danger)),
+                        start, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    sb.setSpan(StyleSpan(Typeface.BOLD), start, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    if (showTime || status != null) sb.append(" · ")
+                }
+                if (status != null) sb.append(Ui.time(this@ThreadActivity, m.date)).append(" · ").append(status)
+                else if (showTime) sb.append(Ui.time(this@ThreadActivity, m.date))
+                meta.text = sb
                 meta.setTextColor(getColor(if (failed) R.color.danger else R.color.text2))
             } else {
                 meta.visibility = View.GONE
