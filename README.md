@@ -1,6 +1,6 @@
 # pSMS
 
-A tiny, private SMS app for Android. The whole app is about 140 KB and has no internet access at all, yet it filters spam, groups conversations into labels and puts one-time codes one tap away.
+A tiny, private SMS app for Android. It does not request Internet access. It filters messages, groups conversations into labels and puts one-time codes one tap away. Sent SMS still travels through your mobile carrier.
 
 <p align="center">
   <img src="store/feature_graphic_1024x500.png" alt="pSMS" width="720">

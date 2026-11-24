@@ -6,7 +6,7 @@ pSMS ("the app") is an open-source SMS app developed by vladgba. This policy exp
 
 ## No data collection
 
-- The app does **not** request the `INTERNET` permission, so it has no way to send anything off your device.
+- The app does **not** request the `INTERNET` permission, so it cannot make direct Internet connections. Calls, messages, exports and other actions handed to Android or another app can still leave the device.
 - It contains no analytics, crash reporting, advertising or tracking SDKs, and no third-party libraries at all.
 - The developer receives no data from the app, whether personal, usage or diagnostic.
 
