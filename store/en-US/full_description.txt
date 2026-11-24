@@ -1,0 +1,5 @@
+Use pSMS as your default SMS app, organize conversations, filter messages and copy detected codes.
+
+Send SMS, organize conversations and manage message filtering rules.
+
+Requires Android API 24 or later.

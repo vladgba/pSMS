@@ -1,0 +1,60 @@
+{
+  "reviewed_on": "2026-11-16",
+  "relocated_on": "2026-11-17",
+  "apps": [
+    {
+      "slug": "picoSMS",
+      "name": "pSMS",
+      "project": ".",
+      "module": "app",
+      "package": "x.vladgba.sms",
+      "min_sdk": "24",
+      "target_sdk": "36",
+      "version_name": "1.0.0",
+      "version_code": null,
+      "version_source": "version.properties",
+      "commit": "a39b477ea5de175acd4897172706604490a74b8d",
+      "permissions": [
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.READ_CONTACTS",
+        "android.permission.READ_SMS",
+        "android.permission.RECEIVE_MMS",
+        "android.permission.RECEIVE_SMS",
+        "android.permission.RECEIVE_WAP_PUSH",
+        "android.permission.SEND_SMS"
+      ],
+      "permission_scope": "main source manifest only",
+      "removed_permissions": [],
+      "allow_backup": "false",
+      "source_evidence": {
+        "network": [
+          "app/src/main/java/x/vladgba/sms/AboutPage.kt",
+          "app/src/main/java/x/vladgba/sms/pui/PAbout.kt"
+        ],
+        "storage": [
+          "app/src/main/java/x/vladgba/sms/Db.kt",
+          "app/src/main/java/x/vladgba/sms/Labels.kt",
+          "app/src/main/java/x/vladgba/sms/Picks.kt",
+          "app/src/main/java/x/vladgba/sms/Rules.kt",
+          "app/src/main/java/x/vladgba/sms/Theme.kt"
+        ],
+        "sharing": [
+          "app/src/main/java/x/vladgba/sms/BackupPage.kt"
+        ],
+        "learning_clipboard": [],
+        "speech_translation": []
+      },
+      "review_items": [
+        "Default SMS role and restricted SMS permission declaration.",
+        "Owner must confirm developer identity/contact, production support and privacy URLs, countries, pricing, ads, target age and content rating.",
+        "Audit runtime traffic, dependencies and final merged release manifest before signing off Data safety. Source manifest alone is not a complete data audit.",
+        "Create a signed release AAB, test the release on a device and complete the Play Console testing/review requirements applicable to this account. No release binary was built by this documentation task."
+      ],
+      "publication_files": {
+        "store": "store",
+        "site": "docs/site/index.md",
+        "privacy": "PRIVACY.md"
+      }
+    }
+  ]
+}
